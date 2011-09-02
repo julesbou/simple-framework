@@ -38,7 +38,8 @@ class Kernel
 
         if (!isset($this->container['templating.vars'])) {
             if (!isset($this->container['view'])) {
-                $this->container['view'] = new View($this->container['router']);
+                $this->container['view'] = new View();
+                $this->container['view']->setRouter($this->container['router']);
             }
             $this->container['templating.vars'] = array(
                 'view' => $this->container['view'],
