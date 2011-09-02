@@ -104,4 +104,9 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $_SERVER['PATH_INFO'] = '/';
         $this->assertEquals("template content\n added content", $this->kernel->run());
     }
+
+    public function testView()
+    {
+        $this->assertTrue(isset($this->container['view']));
+    }
 }

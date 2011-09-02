@@ -37,8 +37,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $phpunit = $this;
         $container['callable'] = function($container) use($phpunit) {
             $phpunit->assertInstanceof('SimpleFramework\Container', $container);
+            return 'called';
         };
-        $container['callable'];
+        $this->assertEquals('called', $container['callable']);
     }
 
     public function testGetElement()

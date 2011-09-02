@@ -26,13 +26,24 @@ class Kernel
             $this->container['logger'] = new Logger($this->container['logger.file']);
         }
 
-        if (!isset($this->container['templating.vars'])) {
-            $this->container['templating.vars'] = array();
-        }
+        $this->container['router'] = function($container) {
+            return new Router($container['router.routes']);
+        };
 
-        $this->container['router'] = new Router($this->container['router.routes']);
-        $this->container['templating'] = new Templating($this->container['templating.directories'], $this->container['templating.vars']);
+        $this->container['templating'] = function($container) {
+            return new Templating($container['templating.directories'], $container['templating.vars']);
+        };
+
         $this->container['event_dispatcher'] = new EventDispatcher();
+
+        if (!isset($this->container['templating.vars'])) {
+            if (!isset($this->container['view'])) {
+                $this->container['view'] = new View($this->container['router']);
+            }
+            $this->container['templating.vars'] = array(
+                'view' => $this->container['view'],
+            );
+        }
     }
 
     /**
