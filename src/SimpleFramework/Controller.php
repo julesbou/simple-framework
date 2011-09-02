@@ -11,22 +11,29 @@ class Controller
         $this->container = $container;
     }
 
-    public function render($template, $vars = array(), $layout = null)
+    protected function render($template, $vars = array(), $layout = null)
     {
         return $this->container['templating']->render($template, $vars, $layout);
     }
 
-    public function url($route, $params = array())
+    protected function url($route, $params = array())
     {
         return $this->container['router']->generate($route, $params);
     }
 
-    public function newHttpException($message, $code)
+    protected function newHttpException($message, $code)
     {
         if (!is_int($code)) {
             throw new \InvalidArgumentException('status code should be an integer');
         }
 
         return new HttpException($message, $code);
+    }
+
+    protected function redirect($url)
+    {
+        header('Status: 301 Moved Permanently', false, 301);
+        header('Location: '.$url);
+        exit();
     }
 }
