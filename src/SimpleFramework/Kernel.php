@@ -35,13 +35,14 @@ class Kernel
                 $this->container['view'] = new View();
             }
 
-            $this->container['view']->setRouter($this->container['router']);
-
             $this->container['templating.vars'] = array(
                 'view' => $this->container['view'],
             ) + $this->container['templating.vars'];
 
             $this->container['templating'] = new Templating($this->container['templating.directories'], $this->container['templating.vars']);
+            $this->container['view']->setRouter($this->container['router']);
+            $this->container['view']->setTemplating($this->container['templating']);
+
         }
     }
 

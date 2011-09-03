@@ -2,22 +2,30 @@
 
 namespace SimpleFramework;
 
-use SimpleFramework\Router;
-
 class View
 {
     protected $slots;
-
     protected $router;
+    protected $templating;
 
     public function setRouter(Router $router)
     {
         $this->router = $router;
     }
 
+    public function setTemplating(Templating $templating)
+    {
+        $this->templating = $templating;
+    }
+
     public function url($route, array $params = array())
     {
         return $this->router->generate($route, $params);
+    }
+
+    public function render($template, array $vars = array())
+    {
+        return $this->templating->render($template, $vars);
     }
 
     public function slot($key, $val = null)
