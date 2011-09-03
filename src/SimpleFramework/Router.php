@@ -16,8 +16,17 @@ class Router
         $routeFound = false;
 
         foreach ($this->routes as $routeName => $route) {
+            $pattern = $route['pattern'];
+
+            if (isset($route['requirements'])) {
+                foreach ($route['requirements'] as $param => $requirement) {
+                    $pattern = str_replace('{'.$param.'}', "(?P<$param>$requirement)", $pattern);
+                }
+            }
+
             $repl = array('/' => '\/', '{' => '(?P<', '}' => '>[^\/]+)');
-            $pattern = sprintf('/^%s$/', str_replace(array_keys($repl), array_values($repl), $route['pattern']));
+            $pattern = sprintf('/^%s$/', str_replace(array_keys($repl), array_values($repl), $pattern));
+
             if (
                 preg_match($pattern, $url, $params)
                 && (!isset($route['method']) || $route['method'] == $_SERVER['REQUEST_METHOD'])
