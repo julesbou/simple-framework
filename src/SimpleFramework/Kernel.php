@@ -14,10 +14,6 @@ class Kernel
 
     private function build()
     {
-        if (!isset($this->container['templating.directories'])) {
-            throw new \ErrorException('you must specifiy at least one template directory');
-        }
-
         if (!isset($this->container['router.routes'])) {
             throw new \ErrorException('you must specifiy at least one route');
         }
@@ -30,21 +26,23 @@ class Kernel
 
         $this->container['event_dispatcher'] = new EventDispatcher();
 
-        if (!isset($this->container['templating.vars'])) {
-            $this->container['tmplating.vars'] = array();
+        if (isset($this->container['templating.directories'])) {
+            if (!isset($this->container['templating.vars'])) {
+                $this->container['templating.vars'] = array();
+            }
+
+            if (!isset($this->container['view'])) {
+                $this->container['view'] = new View();
+            }
+
+            $this->container['view']->setRouter($this->container['router']);
+
+            $this->container['templating.vars'] = array(
+                'view' => $this->container['view'],
+            ) + $this->container['templating.vars'];
+
+            $this->container['templating'] = new Templating($this->container['templating.directories'], $this->container['templating.vars']);
         }
-
-        if (!isset($this->container['view'])) {
-            $this->container['view'] = new View();
-        }
-
-        $this->container['view']->setRouter($this->container['router']);
-
-        $this->container['templating.vars'] = array(
-            'view' => $this->container['view'],
-        ) + $this->container['templating.vars'];
-
-        $this->container['templating'] = new Templating($this->container['templating.directories'], $this->container['templating.vars']);
     }
 
     /**

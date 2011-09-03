@@ -60,14 +60,6 @@ class KernelTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $container = new Container();
-            $container['templating.directories'] = array();
-            $kernel = new Kernel($container);
-            $this->fail('should provide templating directories');
-        } catch (\ErrorException $e) {}
-
-        try {
-            $container = new Container();
-            $container['router.routes'] = array();
             $kernel = new Kernel($container);
             $this->fail('should provide routes');
         } catch (\ErrorException $e) {}
