@@ -26,25 +26,25 @@ class Kernel
             $this->container['logger'] = new Logger($this->container['logger.file']);
         }
 
-        $this->container['router'] = function($container) {
-            return new Router($container['router.routes']);
-        };
-
-        $this->container['templating'] = function($container) {
-            return new Templating($container['templating.directories'], $container['templating.vars']);
-        };
+        $this->container['router'] = new Router($this->container['router.routes']);
 
         $this->container['event_dispatcher'] = new EventDispatcher();
 
         if (!isset($this->container['templating.vars'])) {
-            if (!isset($this->container['view'])) {
-                $this->container['view'] = new View();
-                $this->container['view']->setRouter($this->container['router']);
-            }
-            $this->container['templating.vars'] = array(
-                'view' => $this->container['view'],
-            );
+            $this->container['tmplating.vars'] = array();
         }
+
+        if (!isset($this->container['view'])) {
+            $this->container['view'] = new View();
+        }
+
+        $this->container['view']->setRouter($this->container['router']);
+
+        $this->container['templating.vars'] = array(
+            'view' => $this->container['view'],
+        ) + $this->container['templating.vars'];
+
+        $this->container['templating'] = new Templating($this->container['templating.directories'], $this->container['templating.vars']);
     }
 
     /**
