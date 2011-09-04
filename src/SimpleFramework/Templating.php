@@ -20,6 +20,9 @@ class Templating
         }
 
         $this->directories = $directories;
+
+        $globalVars['templating'] = $this;
+
         $this->globalVars = $globalVars;
     }
 
@@ -35,7 +38,7 @@ class Templating
     public function render($template, $vars = array(), $layout = null)
     {
         $templatePath   = $this->findTemplate($template);
-        $vars           = $this->globalVars + $vars;
+        $vars           = array('view' => $this->globalVars) + $vars;
         $content        = $this->doRender($templatePath, $vars);
 
         if (null === $layout) {
@@ -43,7 +46,7 @@ class Templating
         }
 
         $layoutPath = $this->findTemplate($layout);
-        $layoutVars = array('content' => $content) + $this->globalVars;
+        $layoutVars = array('content' => $content, 'view' => $this->globalVars);
 
         return $this->doRender($layoutPath, $layoutVars);
     }
