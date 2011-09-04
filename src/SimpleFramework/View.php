@@ -2,11 +2,12 @@
 
 namespace SimpleFramework;
 
-class View
+class View extends \ArrayObject
 {
     protected $slots;
     protected $router;
     protected $templating;
+    protected $helpers;
 
     public function setRouter(Router $router)
     {
@@ -45,5 +46,29 @@ class View
     public function slotStop($key)
     {
         $this->slots[$key] = ob_get_clean();
+    }
+
+    public function offsetExists($offset)
+    {
+        return isset($this->helpers[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        if (!isset($this->helpers[$offset])) {
+            throw new \OutOfBoundsException("helper '$offset' do not exists");
+        }
+
+        return $this->helpers[$offset];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->helpers[$offset] = $value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        throw new \BadMethodCallException('cannot unset elements');
     }
 }
