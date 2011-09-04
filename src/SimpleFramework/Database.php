@@ -57,7 +57,7 @@ abstract class Database
 
     public function update($id, array $data, $identifier = null)
     {
-        $cols = self::formatClause(array_keys($data), '?');
+        $cols = self::formatClause(array_keys($data), ',');
 
         $query = "UPDATE $this->tablename SET $cols WHERE $this->primaryKey = $id";
 
