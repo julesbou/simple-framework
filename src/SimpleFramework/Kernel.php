@@ -12,6 +12,11 @@ class Kernel
         $this->build();
     }
 
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
     private function build()
     {
         if (!isset($this->container['router.routes'])) {
