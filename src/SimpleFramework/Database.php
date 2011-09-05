@@ -100,7 +100,7 @@ abstract class Database
         }
 
         $result = $this->stmt->fetchAll();
-        return !$result ? null : $result;
+        return !$result ? array() : $result;
     }
 
     public function find($params = array())
