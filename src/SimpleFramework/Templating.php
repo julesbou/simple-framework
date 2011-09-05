@@ -11,7 +11,7 @@ class Templating
 
     protected $globalVars;
 
-    public function __construct($directories = array(), array $globalVars = array())
+    public function __construct($directories = array())
     {
         foreach ($directories as $templatesDir) {
             if (!is_dir($templatesDir)) {
@@ -20,9 +20,10 @@ class Templating
         }
 
         $this->directories = $directories;
+    }
 
-        $globalVars['templating'] = $this;
-
+    public function setGlobalVars(array $globalVars)
+    {
         $this->globalVars = $globalVars;
     }
 

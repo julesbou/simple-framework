@@ -48,14 +48,6 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("blabla", $this->kernel->run());
     }
 
-    public function testOverrideTemplateParameters()
-    {
-        $this->container['templating.vars'] = array('var' => 'global var');
-        $kernel = new Kernel($this->container);
-
-        $this->assertEquals("global var", $this->container['templating']->render('var_template.php'));
-    }
-
     public function testInvalidConfig()
     {
         try {
