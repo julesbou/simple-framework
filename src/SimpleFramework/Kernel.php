@@ -2,14 +2,35 @@
 
 namespace SimpleFramework;
 
-class Kernel
+abstract class Kernel
 {
-    private $container;
+    protected $env;
 
-    public function __construct(Container $container)
+    protected $container;
+
+    public function __construct($env = 'DEV')
     {
-        $this->container = $container;
+        $this->env = $env;
+        $this->container = new Container();
+
+        $methods = get_class_methods($this);
+        $config = $this->getConfig();
+
+        foreach ($methods as $method) {
+            if (0 === strpos($method, 'init')) {
+                $name = strtolower(str_replace('init', '', $method));
+                $this->$method(isset($config[$name]) ? $config[$name] : array());
+            }
+        }
+
         $this->build();
+
+        foreach ($methods as $method) {
+            if (0 === strpos($method, 'start')) {
+                $name = strtolower(str_replace('start', '', $method));
+                $this->$method(isset($config[$name]) ? $config[$name] : array());
+            }
+        }
     }
 
     public function getContainer()
@@ -17,28 +38,24 @@ class Kernel
         return $this->container;
     }
 
+    abstract protected function getRoutes();
+    abstract protected function getConfig();
+    abstract protected function getTemplatingDirectories();
+    abstract protected function getTemplatingVars();
+    abstract protected function getLogFile();
+
     private function build()
     {
-        if (!isset($this->container['router.routes'])) {
-            throw new \ErrorException('you must specifiy at least one route');
+        if (null !== ($logFile = $this->getLogFile())) {
+            $this->container['logger'] = new Logger($logFile);
         }
 
-        if (isset($this->container['logger.file'])) {
-            $this->container['logger'] = new Logger($this->container['logger.file']);
-        }
-
-        $this->container['router'] = new Router($this->container['router.routes']);
+        $this->container['router'] = new Router($this->getRoutes());
 
         $this->container['event_dispatcher'] = new EventDispatcher();
 
-        if (isset($this->container['templating.directories'])) {
-            if (!isset($this->container['templating.vars'])) {
-                $this->container['templating.vars'] = array();
-            }
-
-            $this->container['templating.vars'] = array('router' => $this->container['router']) + $this->container['templating.vars'];
-            $this->container['templating'] = new Templating($this->container['templating.directories'], $this->container['templating.vars']);
-        }
+        $this->container['templating'] = new Templating($this->getTemplatingDirectories());
+        $this->container['templating']->setGlobalVars($this->getTemplatingVars());
     }
 
     /**
