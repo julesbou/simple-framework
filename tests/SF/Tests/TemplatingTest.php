@@ -52,10 +52,11 @@ EOF;
 
     public function testGlobalVars()
     {
-        $templating = new Templating(array('' => __DIR__.'/Fixtures/templates'), array('var' =>'global var'));
-        $this->assertEquals("global var", $templating->render('var_template.php'));
+        $templating = new Templating(array('' => __DIR__.'/Fixtures/templates'));
+        $templating->setGlobalVars(array('var' => 'global var'));
+        $this->assertEquals("global var", $templating->render('global_template.php'));
 
-        $this->assertEquals("global var", $templating->render('var_template.php', array('var' => 'local var')), 'global var cannot be overriden');
+        $this->assertEquals("global var", $templating->render('global_template.php', array('var' => 'local var')), 'global var cannot be overriden');
     }
 
     /**

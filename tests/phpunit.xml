@@ -13,13 +13,13 @@
 >
     <testsuites>
         <testsuite name="SimpleFramework Test Suite">
-            <directory>./SimpleFramework/</directory>
+            <directory>./SF/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>../src/SimpleFramework/</directory>
+            <directory>../src/SF/</directory>
         </whitelist>
     </filter>
 

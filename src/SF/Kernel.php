@@ -8,34 +8,24 @@ abstract class Kernel
 
     protected $container;
 
-    public function __construct($env = 'DEV')
+    public function __construct($env = 'DEV', Container $container = null)
     {
+        if (null === $container) {
+            $container = new Container();
+        }
+
         $this->env = $env;
-        $this->container = new Container();
-
-        $methods = get_class_methods($this);
-        $config = $this->getConfig();
-
-        foreach ($methods as $method) {
-            if (0 === strpos($method, 'init')) {
-                $name = strtolower(str_replace('init', '', $method));
-                $this->$method(isset($config[$name]) ? $config[$name] : array());
-            }
-        }
-
-        $this->build();
-
-        foreach ($methods as $method) {
-            if (0 === strpos($method, 'start')) {
-                $name = strtolower(str_replace('start', '', $method));
-                $this->$method(isset($config[$name]) ? $config[$name] : array());
-            }
-        }
+        $this->container = $container;
     }
 
     public function getContainer()
     {
         return $this->container;
+    }
+
+    public function getEnv()
+    {
+        return $this->env;
     }
 
     abstract protected function getRoutes();
@@ -46,16 +36,31 @@ abstract class Kernel
 
     private function build()
     {
+        $this->callStep('init');
+
         if (null !== ($logFile = $this->getLogFile())) {
             $this->container['logger'] = new Logger($logFile);
         }
 
         $this->container['router'] = new Router($this->getRoutes());
-
         $this->container['event_dispatcher'] = new EventDispatcher();
-
         $this->container['templating'] = new Templating($this->getTemplatingDirectories());
         $this->container['templating']->setGlobalVars($this->getTemplatingVars());
+
+        $this->callStep('start');
+    }
+
+    protected function callStep($step)
+    {
+        $methods = get_class_methods($this);
+        $config = $this->getConfig();
+
+        foreach ($methods as $method) {
+            if (0 === strpos($method, $step)) {
+                $name = strtolower(str_replace($step, '', $method));
+                $this->$method(isset($config[$name]) ? $config[$name] : array());
+            }
+        }
     }
 
     /**
@@ -67,6 +72,7 @@ abstract class Kernel
      */
     public function run()
     {
+        $this->build();
         $this->container->freeze();
 
         $pathInfo = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';

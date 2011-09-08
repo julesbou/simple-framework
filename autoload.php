@@ -1,9 +1,7 @@
 <?php
 
-require_once __DIR__.'/src/SimpleFramework/ClassLoader.php';
+require_once __DIR__.'/src/SF/ClassLoader.php';
 
-use SimpleFramework\ClassLoader;
-
-$loader = new ClassLoader(array(
-    'SimpleFramework' => __DIR__.'/src',
+$loader = new SF\ClassLoader(array(
+    'SF' => __DIR__.'/src',
 ));
