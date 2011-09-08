@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleFramework\Tests\Fixtures\Database;
+namespace SF\Tests\Fixtures\Database;
 
 class Video
 {

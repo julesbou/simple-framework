@@ -1,8 +1,8 @@
 <?php
 
-namespace SimpleFramework\Tests;
+namespace SF\Tests;
 
-use SimpleFramework\EventDispatcher;
+use SF\EventDispatcher;
 
 class EventDispatcherTest extends \PHPUnit_Framework_TestCase
 {

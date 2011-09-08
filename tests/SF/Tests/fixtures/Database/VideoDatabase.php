@@ -1,14 +1,14 @@
 <?php
 
-namespace SimpleFramework\Tests\Fixtures\Database;
+namespace SF\Tests\Fixtures\Database;
 
-use SimpleFramework\Database;
+use SF\Database;
 
 class VideoDatabase extends Database
 {
     protected function getClassName()
     {
-        return 'SimpleFramework\Tests\Fixtures\Database\Video';
+        return 'SF\Tests\Fixtures\Database\Video';
     }
 
     protected function getTableName()
@@ -27,7 +27,7 @@ class VideoDatabase extends Database
             'user' => array(
                 'property'  => 'user',
                 'type'      => 'one',
-                'class'     => 'SimpleFramework\Tests\Fixtures\Database\User',
+                'class'     => 'SF\Tests\Fixtures\Database\User',
                 'table'     => 'test_user',
                 'foreign'   => 'user_ID',
                 'local'     => 'user_id',

@@ -1,8 +1,8 @@
 <?php
 
-namespace SimpleFramework\Tests;
+namespace SF\Tests;
 
-use SimpleFramework\Router;
+use SF\Router;
 
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +39,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             $_SERVER['REQUEST_METHOD'] = 'GET';
             $this->router->match('/unknown');
             $this->fail('expected HttpException');
-        } catch (\SimpleFramework\HttpException $e) {
+        } catch (\SF\HttpException $e) {
             $this->assertEquals(404, $e->getCode());
         }
     }
@@ -50,7 +50,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             $_SERVER['REQUEST_METHOD'] = 'POST';
             $this->router->match('/url');
             $this->fail('expected HttpException');
-        } catch (\SimpleFramework\HttpException $e) {
+        } catch (\SF\HttpException $e) {
             $this->assertEquals(404, $e->getCode());
         }
     }

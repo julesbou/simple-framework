@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpleFramework\Tests;
+namespace SF\Tests;
 
-use SimpleFramework\Kernel;
-use SimpleFramework\Container;
+use SF\Kernel;
+use SF\Container;
 
 require __DIR__.'/Fixtures/controller.php';
 

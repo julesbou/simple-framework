@@ -1,6 +1,6 @@
 <?php
 
-use SimpleFramework\Controller as BaseController;
+use SF\Controller as BaseController;
 
 class controller extends BaseController
 {

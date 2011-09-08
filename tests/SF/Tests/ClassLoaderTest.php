@@ -1,8 +1,8 @@
 <?php
 
-namespace SimpleFramework\Tests;
+namespace SF\Tests;
 
-use SimpleFramework\ClassLoader;
+use SF\ClassLoader;
 
 class ClassLoaderTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,0 +1,58 @@
+<?php
+
+class Kernel extends \SF\Kernel
+{
+    protected function getRoutes()
+    {
+        // Create a `routes.php`file containing:
+        //
+        // <?php
+        // return array(
+        //    'index' => array(
+        //        'pattern'  => '/',
+        //        'controller' => 'MyController',
+        //        'action' => 'myAction',
+        //    ),
+        // );
+
+        return require __DIR__.'/routes.php';
+    }
+
+    protected function getConfig();
+    {
+        // Create a `config.php`file containing:
+        //
+        // <?php
+        // return array(
+        //    'foo' => 'bar',
+        // );
+
+        return require __DIR__.'/config.php';
+    }
+
+    protected function getTemplatingDirectories()
+    {
+        return array(
+            'namespace' => __DIR__.'/app/templates',
+        );
+    }
+
+    /**
+     * globals variables that get passed to each templates
+     */
+    protected function getTemplatingVars()
+    {
+        return array(
+            // use to include templates inside other templates
+            'templating' => $this->container['templating'],
+
+            // use to generate routes
+            'router' => $this->container['router'],
+        );
+    }
+
+    protected function getLogFile()
+    {
+        return __DIR__.'/log.txt';
+    }
+}

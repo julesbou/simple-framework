@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleFramework;
+namespace SF;
 
 abstract class Database
 {

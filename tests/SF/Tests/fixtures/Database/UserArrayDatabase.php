@@ -1,8 +1,8 @@
 <?php
 
-namespace SimpleFramework\Tests\Fixtures\Database;
+namespace SF\Tests\Fixtures\Database;
 
-use SimpleFramework\Database;
+use SF\Database;
 
 class UserArrayDatabase extends Database
 {
@@ -22,7 +22,7 @@ class UserArrayDatabase extends Database
             'videos' => array(
                 'property'  => 'video',
                 'type'      => 'many',
-                'class'     => 'SimpleFramework\Tests\Fixtures\Database\Video',
+                'class'     => 'SF\Tests\Fixtures\Database\Video',
                 'table'     => 'test_user_video',
                 'foreign'   => 'user_id',
                 'local'     => 'id',

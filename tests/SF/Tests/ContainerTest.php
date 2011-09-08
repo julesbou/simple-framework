@@ -1,8 +1,8 @@
 <?php
 
-namespace SimpleFramework\Tests;
+namespace SF\Tests;
 
-use SimpleFramework\Container;
+use SF\Container;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +36,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $phpunit = $this;
         $container['callable'] = function($container) use($phpunit) {
-            $phpunit->assertInstanceof('SimpleFramework\Container', $container);
+            $phpunit->assertInstanceof('SF\Container', $container);
             return 'called';
         };
         $this->assertEquals('called', $container['callable']);

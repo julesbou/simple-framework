@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleFramework\Tests;
+namespace SF\Tests;
 
 require __DIR__.'/Fixtures/Database/User.php';
 require __DIR__.'/Fixtures/Database/UserArrayDatabase.php';

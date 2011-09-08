@@ -1,8 +1,8 @@
 <?php
 
-namespace SimpleFramework\Tests;
+namespace SF\Tests;
 
-use SimpleFramework\Templating;
+use SF\Templating;
 
 class TemplatingMock extends Templating
 {
