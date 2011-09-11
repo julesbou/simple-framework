@@ -38,8 +38,8 @@ abstract class Database
     protected function getRelations()
     {
         return array();
+        // @codeCoverageIgnoreEnd
     }
-    // @codeCoverageIgnoreEnd
 
     abstract protected function getTableName();
 

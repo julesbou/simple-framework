@@ -11,9 +11,9 @@ Autoloader is a lazy class loader, it works with prefixes and namespaces. Usage:
 ```php
 <?php
 
-require __DIR__.'/path/to/simple-framework/src/SimpleFramework/Autoloader.php';
+require __DIR__.'/path/to/simple-framework/src/SF/Autoloader.php';
 
-use SimpleFramework\Autoloader;
+use SF\Autoloader;
 
 $loader = new Autoloader(array(
     'Pear_'         => __DIR__.'/libs',
@@ -36,7 +36,7 @@ Usage:
 ```php
 <?php
 
-use SimpleFramework\Container;
+use SF\Container;
 
 $container = new Container();
 
@@ -70,7 +70,7 @@ Inside each controller you have access to the container:
 
 namespace MyApp\Controller;
 
-class UserController extends \SimpleFramework\Controller
+class UserController extends \SF\Controller
 {
     public function indexAction()
     {
@@ -81,7 +81,7 @@ class UserController extends \SimpleFramework\Controller
 
 ## Controller
 
-A controller can be a POPO (Plain old PHP object) or extends Controller, in the second case you have shortcut methods inside the `SimpleFramework\Controller` class.
+A controller can be a POPO (Plain old PHP object) or extends Controller, in the second case you have shortcut methods inside the `SF\Controller` class.
 
 The container is passed to the controller in the first argument of his `__construct()` method.
 
@@ -92,7 +92,7 @@ Usage:
 
 namespace MyApp\Controller;
 
-class UserController extends \SimpleFramework\Controller
+class UserController extends \SF\Controller
 {
     public function indexAction()
     {
@@ -114,7 +114,7 @@ A simple use case is the wish to change session data of the logged-in user when 
 ```php
 <?php
 
-use SimpleFramework\EventDispatcher;
+use SF\EventDispatcher;
 
 $dispatcher = new EventDispatcher();
 
@@ -137,8 +137,8 @@ A simple use case is the wish to add a web-debug-toolbar:
 ```php
 <?php
 
-use SimpleFramework\Container;
-use SimpleFramework\Kernel;
+use SF\Container;
+use SF\Kernel;
 
 $container= new Container();
 $container['env'] = 'DEV';
@@ -172,8 +172,8 @@ Usage:
 ```php
 <?php
 
-use SimpleFramework\Container;
-use SimpleFramework\Kernel;
+use SF\Container;
+use SF\Kernel;
 
 $container = new Container();
 $container['router.routes'] = array();
@@ -190,7 +190,7 @@ Usage:
 ```php
 <?php
 
-use SimpleFramework\Logger;
+use SF\Logger;
 
 $logger = new Logger(__DIR__.'/logs.log');
 
@@ -249,7 +249,7 @@ Render a html template, pass variables to it, decorate it with a layout, usage:
 ```php
 <?php
 
-$templating = new SimpleFramework\Templating(array(
+$templating = new SF\Templating(array(
     ''    => __DIR__.'/templates',
     'baz' => __DIR__.'/apps/baz/templates',
 ));
