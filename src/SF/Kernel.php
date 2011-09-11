@@ -16,6 +16,8 @@ abstract class Kernel
 
         $this->env = $env;
         $this->container = $container;
+
+        $this->build();
     }
 
     public function getContainer()
@@ -34,7 +36,7 @@ abstract class Kernel
     abstract protected function getTemplatingVars();
     abstract protected function getLogFile();
 
-    private function build()
+    protected function build()
     {
         $this->callStep('init');
 
@@ -72,7 +74,6 @@ abstract class Kernel
      */
     public function run()
     {
-        $this->build();
         $this->container->freeze();
 
         $pathInfo = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';

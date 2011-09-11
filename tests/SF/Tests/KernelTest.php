@@ -16,7 +16,6 @@ class KernelTest extends \PHPUnit_Framework_TestCase
     {
         $this->container = new Container();
         $this->kernel = new Fixtures\TestKernel('DEV', $this->container);
-        $this->kernel->run();
     }
 
     public function testContainer()
@@ -36,6 +35,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
 
     public function testFrozeContainer()
     {
+        $this->kernel->run();
         $this->assertTrue($this->container->isFrozen());
     }
 
