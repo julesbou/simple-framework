@@ -57,7 +57,8 @@ abstract class Database
 
     public function update($id, array $data, $identifier = null)
     {
-        $cols = self::formatClause(array_keys($data), ',');
+        $id = (int)$id;
+        $cols = $this->formatClause(array_keys($data), ',');
 
         $query = "UPDATE $this->tablename SET $cols WHERE $this->primaryKey = $id";
 
@@ -66,6 +67,7 @@ abstract class Database
 
     public function delete($id)
     {
+        $id = (int)$id;
         $query = "DELETE FROM $this->tablename WHERE $this->primaryKey = $id";
 
         return $this->pdo->prepare($query)->execute();
@@ -84,7 +86,8 @@ abstract class Database
         }
 
         $result = $this->stmt->fetch();
-        return !$result ? null : $result;
+
+        return $result ? $result : null;
     }
 
     public function all()
@@ -100,15 +103,16 @@ abstract class Database
         }
 
         $result = $this->stmt->fetchAll();
-        return !$result ? array() : $result;
+
+        return $result ? $result : null;
     }
 
     public function find($params = array())
     {
         if (is_array($params) && !empty($params)) {
-            $where = 'WHERE '.self::formatClause(array_keys($params), 'AND', array_values($params));
+            $where = 'WHERE '.$this->formatClause(array_keys($params), 'AND', array_values($params));
         } else if (!is_array($params)) {
-            $where = 'WHERE '.self::formatClause($this->primaryKeys, 'OR', array_fill(0, 5, $params));
+            $where = 'WHERE '.$this->formatClause($this->primaryKeys, 'OR', array_fill(0, 5, $params));
         } else {
             $where = '';
         }
@@ -192,7 +196,7 @@ abstract class Database
         // pre-format query
         $selects = implode(', ', $selects);
         $joins = count($joins) > 0 ? "$join JOIN ".implode(', ', $joins) : '';
-        $where = count($params) > 0 ? 'WHERE '.self::formatClause(array_keys($params), 'AND', array_values($params), $this->tablename.'.') : '';
+        $where = count($params) > 0 ? 'WHERE '.$this->formatClause(array_keys($params), 'AND', array_values($params), $this->tablename.'.') : '';
         $query = "SELECT $selects FROM $this->tablename $joins $where";
 
         return $query;
@@ -241,7 +245,7 @@ abstract class Database
         }
     }
 
-    private static function formatClause(array $keys, $operator, $values = array(), $alias = '')
+    private function formatClause(array $keys, $operator, $values = array(), $alias = '')
     {
         if (empty($values)) {
             $values = array_fill(0, count($keys), '?');
@@ -250,11 +254,8 @@ abstract class Database
         $clause = '';
         foreach ($keys as $i => $key) {
             $val = $values[$i];
-            $clause .= sprintf('%s %s = %s ',
-                $i == 0 ? '' : $operator,
-                $alias.$key,
-                is_string($val) && '?' !== $val ? "'$val'" : $val
-            );
+            $val = is_string($val) && '?' !== $val ? $this->pdo->quote($val) : $val;
+            $clause .= sprintf('%s %s = %s ', $i == 0 ? '' : $operator, $alias.$key, $val);
         }
         return trim($clause);
     }
