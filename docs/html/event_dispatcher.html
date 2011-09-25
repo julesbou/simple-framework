@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SimpleFramework - simplest web php framework</title>
+        <style type="text/css">
+            body{font-family:helvetica, arial, freesans, clean, sans-serif;color:#333;background-color:#fff;border:none;line-height:1.5;text-align:left;margin:2em 3em}
+            pre{background-color:#eee;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;overflow:auto;padding:10px}
+            code{background-color:#eee;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;padding:1px 3px}
+            li p{margin:.3em}li{list-style-type:disc}a:link,a:visited{color:#33e;text-decoration:none}a:hover{color:#00f;text-shadow:1px 1px 2px #ccf;text-decoration:underline}h1{color:#999;font-weight:bold}h2{border-bottom:1px dotted #aaa;margin-bottom:1em;color:#333}h3{color:#666}.shadow{-webkit-box-shadow:0 5px 15px #000;-moz-box-shadow:0 5px 15px #000;box-shadow:0 5px 15px #000}.hll{background-color:#ffffcc}.err{color:#a61717;background-color:#e3d2d2}.cp{color:#cc0000;font-weight:bold}.cs{color:#cc0000;font-weight:bold;background-color:#fff0f0}.gd{color:#000000;background-color:#ffdddd}.ge{font-style:italic}.gh{color:#303030}.gi{color:#000000;background-color:#ddffdd}.gs{font-weight:bold}.gu{color:#606060}.kt{color:#888888;font-weight:bold}.no{color:#003366;font-weight:bold}.nf{color:#0066bb;font-weight:bold}.nl{color:#336699;font-style:italic}.py{color:#336699;font-weight:bold}.w{color:#bbbbbb}.se{color:#0044dd;background-color:#fff0f0}.si{color:#3333bb;background-color:#fff0f0}.sx{color:#22bb22;background-color:#f0fff0}.sr{color:#008800;background-color:#fff0ff}.ss{color:#aa6600;background-color:#fff0f0}.vg{color:#dd7700}.vi{color:#3333bb}.c,.cm,.c1,.go{color:#888888}.k,.kc,.kd,.kn,.kr{color:#008800;font-weight:bold}.gr,.gt{color:#aa0000}.gp,.nd{color:#555555}.kp,.ow{color:#008800}.m,.mf,.mh,.mi,.mo,.il{color:#0000DD;font-weight:bold}.s,.sb,.sc,.sd,.s2,.sh,.s1{color:#dd2200;background-color:#fff0f0}.na,.nv,.vc{color:#336699}.nb,.bp{color:#003388}.nc,.ne,.nn,.nt{color:#bb0066;font-weight:bold}
+
+            header {text-align: center;margin-bottom: 30px;}
+            header h1 {clear: both;display: block;font-size: 13px;line-height: 10px;}
+
+            section {width: 66%;float: left;margin-right: 2%;}
+
+            aside {margin-left: 50px;width: 32%;bottom: 0;top: 120px;position: fixed;left: 68%;}
+            aside h4 {margin-bottom: 10px;}
+            aside ul {margin-top: 0;margin-left: 0;}
+            aside li {list-style-type: square;}
+            aside a {color: #444 !important;}
+            aside a.active {font-weight: bold;text-decoration: underline;}
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="/logo.png" alt="SimpleFramework">
+            <h1>It's not about framework, it's about you</h1>
+        </header>
+        <section>
+            <h2>EventDispatcher</h2>
+
+<p>EventDispatcher helps you to make your code more extendible, reusable and flexible. The event dispatcher register listeners (or callback) that can be called later.</p>
+
+<p>A simple use case is the wish to change session data of the logged-in user when we update the database, we can achieve this with the creation of a user.onChange event and add a listener to it:</p>
+
+<div class="highlight">
+<pre><span class="cp">&lt;?php</span>
+
+<span class="k">use</span> <span class="nx">SimpleFramework\EventDispatcher</span><span class="p">;</span>
+
+<span class="nv">$dispatcher</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventDispatcher</span><span class="p">();</span>
+
+<span class="c1">// register the listener</span>
+<span class="nv">$dispatcher</span><span class="o">-&gt;</span><span class="na">listen</span><span class="p">(</span><span class="s1">'user.onChange'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// refresh user session data</span>
+<span class="p">});</span>
+
+<span class="c1">// call the listener</span>
+<span class="nv">$dispatcher</span><span class="o">-&gt;</span><span class="na">dispatch</span><span class="p">(</span><span class="s1">'user.onChange'</span><span class="p">);</span>
+</pre>
+</div>
+
+
+<p>SimpleFramework comes with 2 core events that let you return a response:</p>
+
+<ul>
+<li>
+<code>controller.before</code> called before the action</li>
+<li>
+<code>controller.after</code> called after the action</li>
+</ul>
+<p>A simple use case is the wish to add a web-debug-toolbar:</p>
+
+<div class="highlight">
+<pre><span class="cp">&lt;?php</span>
+
+<span class="k">use</span> <span class="nx">SimpleFramework\Container</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">SimpleFramework\Kernel</span><span class="p">;</span>
+
+<span class="nv">$container</span><span class="o">=</span> <span class="k">new</span> <span class="nx">Container</span><span class="p">();</span>
+<span class="nv">$container</span><span class="p">[</span><span class="s1">'env'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'DEV'</span><span class="p">;</span>
+<span class="nv">$kernel</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Kernel</span><span class="p">(</span><span class="nv">$container</span><span class="p">);</span>
+
+<span class="nv">$container</span><span class="p">[</span><span class="s1">'event_dispatcher'</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">listen</span><span class="p">(</span><span class="s1">'controller.after'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$event</span><span class="p">)</span> <span class="k">use</span><span class="p">(</span><span class="nv">$container</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$content</span> <span class="o">=</span> <span class="nv">$event</span><span class="p">[</span><span class="s1">'content'</span><span class="p">];</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="s1">'DEV'</span> <span class="o">===</span> <span class="nv">$container</span><span class="p">[</span><span class="s1">'env'</span><span class="p">])</span> <span class="p">{</span>
+        <span class="c1">// rendering the toolbar html</span>
+        <span class="nv">$toolbarHTML</span> <span class="o">=</span> <span class="nv">$container</span><span class="p">[</span><span class="s1">'templating'</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">'toolbar.php'</span><span class="p">);</span>
+        <span class="c1">// append the toolbar to the html</span>
+        <span class="k">return</span> <span class="nv">$content</span><span class="o">.</span><span class="nv">$toolbarHTML</span><span class="p">;</span>
+     <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nv">$kernel</span><span class="o">-&gt;</span><span class="na">run</span><span class="p">();</span>
+</pre>
+</div>
+
+        </section>
+        <aside>
+            <h4>Introduction</h4>
+            <ul>
+                <li><a href="/">Introduction</a></li>
+                <li><a href="/install.html">Installation</a></li>
+            </ul>
+
+            <h4>Internals</h4>
+            <ul>
+                <li><a href="/container.html">Container</a></li>
+                <li><a href="/controller.html">Controller</a></li>
+                <li><a href="/event_dispatcher.html">Event Dispatcher</a></li>
+                <li><a href="/kernel.html">Kernel</a></li>
+                <li><a href="/router.html">Router</a></li>
+                <li><a href="/templating.html">Templating</a></li>
+            </ul>
+        </aside>
+        <a href="http://github.com/gordonslondon/SimpleFramework">
+            <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
+            alt="Fork me on GitHub">
+        </a>
+        <script>
+            for (i = 0; i < document.links.length; i++) {
+                if (document.links[i].href.replace(window.location.origin, '') == window.location.pathname) {
+                    document.links[i].className = 'active';
+                }
+            }
+        </script>
+    </body>
+</html>
+
