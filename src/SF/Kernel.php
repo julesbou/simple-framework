@@ -116,7 +116,7 @@ abstract class Kernel
         $controllerRefl = new \ReflectionClass($controller);
 
         if (!$controllerRefl->hasMethod($method)) {
-            throw new \InvalidArgumentException(sprintf('action \'%s\' do not exists', $action));
+            throw new \InvalidArgumentException(sprintf('method \'%s\' in controller \'%s\' do not exists', $method, get_class($controller)));
         }
 
         $reflMethod = $controllerRefl->getMethod($method);
