@@ -56,7 +56,6 @@ abstract class Kernel
         $this->container['router'] = new Router($this->getRoutes());
         $this->container['event_dispatcher'] = new EventDispatcher();
         $this->container['templating'] = new Templating($this->getTemplatingDirectories());
-        $this->container['templating']->setGlobalVars($this->getTemplatingVars());
 
         $this->callStep('start');
     }

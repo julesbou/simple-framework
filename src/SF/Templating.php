@@ -11,14 +11,14 @@ namespace SF;
  * with this source code in the file LICENSE.
  */
 
-class Templating
+class Templating implements \ArrayAccess
 {
     /**
      * @var array An array of directories, keys are section names
      */
     protected $directories;
 
-    protected $globalVars;
+    protected $helpers;
 
     public function __construct($directories = array())
     {
@@ -29,11 +29,6 @@ class Templating
         }
 
         $this->directories = $directories;
-    }
-
-    public function setGlobalVars(array $globalVars)
-    {
-        $this->globalVars = $globalVars;
     }
 
     /**
@@ -48,7 +43,7 @@ class Templating
     public function render($template, $vars = array(), $layout = null)
     {
         $templatePath   = $this->findTemplate($template);
-        $vars           = array('view' => $this->globalVars) + $vars;
+        $vars           = array('view' => $this) + $vars;
         $content        = $this->doRender($templatePath, $vars);
 
         if (null === $layout) {
@@ -56,7 +51,7 @@ class Templating
         }
 
         $layoutPath = $this->findTemplate($layout);
-        $layoutVars = array('content' => $content, 'view' => $this->globalVars);
+        $layoutVars = array('content' => $content, 'view' => $this);
 
         return $this->doRender($layoutPath, $layoutVars);
     }
@@ -98,5 +93,25 @@ class Templating
         }
 
         return $templatePath;
+    }
+
+    public function offsetGet($name)
+    {
+        return $this->helpers[$name];
+    }
+
+    public function offsetExists($name)
+    {
+        return isset($this->helpers[$name]);
+    }
+
+    public function offsetSet($name, $value)
+    {
+        $this->helpers[$name] = $value;
+    }
+
+    public function offsetUnset($name)
+    {
+        throw new \LogicException(sprintf('You can\'t unset a helper (%s).', $name));
     }
 }

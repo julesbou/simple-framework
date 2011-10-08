@@ -50,13 +50,11 @@ EOF;
         $this->assertEquals($complexTemplate, $templating->render('var_template.php', array('var' => '    complex template'), 'layout.php'));
     }
 
-    public function testGlobalVars()
+    public function testRenderHelper()
     {
         $templating = new Templating(array('' => __DIR__.'/Fixtures/templates'));
-        $templating->setGlobalVars(array('var' => 'global var'));
-        $this->assertEquals("global var", $templating->render('global_template.php'));
-
-        $this->assertEquals("global var", $templating->render('global_template.php', array('var' => 'local var')), 'global var cannot be overriden');
+        $templating['helper'] = 'foo';
+        $this->assertEquals("foo", $templating->render('global_template.php'));
     }
 
     /**

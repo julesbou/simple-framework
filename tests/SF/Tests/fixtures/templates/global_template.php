@@ -1,1 +1,1 @@
-<?php echo $view['var'] ?>
+<?php echo $view['helper'] ?>
