@@ -32,6 +32,12 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("template content\n", $templating->render('namespace:template.php'));
     }
 
+    public function testRenderFirstFoundFirstTaken()
+    {
+        $templating = new Templating(array(__DIR__.'/Fixtures/templates', __DIR__.'/Fixtures/Database'));
+        $this->assertEquals("template content\n", $templating->render('template.php'));
+    }
+
     public function testRenderWithVars()
     {
         $templating = new Templating(array('' => __DIR__.'/Fixtures/templates'));

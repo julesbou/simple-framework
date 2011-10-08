@@ -90,6 +90,14 @@ class Templating implements \ArrayAccess
             list($namespace, $template) = explode(':', $template);
         }
 
+        if ($namespace == '' && !isset($this->directories[$namespace])) {
+            foreach ($this->directories as $ns => $dir) {
+                if (file_exists($dir.DIRECTORY_SEPARATOR.$template)) {
+                    $namespace = $ns;
+                }
+            }
+        }
+
         if (!isset($this->directories[$namespace])) {
             throw new \OutOfBoundsException("No template where found in '$namespace'");
         }
