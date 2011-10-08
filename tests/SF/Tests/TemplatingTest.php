@@ -43,12 +43,28 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
         $templating = new Templating(array('' => __DIR__.'/Fixtures/templates'));
         $complexTemplate = <<<EOF
 <h1>Hello</h1>
-    complex template<h2>Bye</h2>
+content
+<h2>Bye</h2>
 
 EOF;
 
-        $this->assertEquals($complexTemplate, $templating->render('var_template.php', array('var' => '    complex template'), 'layout.php'));
+        $this->assertEquals($complexTemplate, $templating->render('template_with_layout.php', array('var' => '    complex template')));
     }
+
+    public function testRenderWithMultiLayout()
+    {
+        $templating = new Templating(array('' => __DIR__.'/Fixtures/templates'));
+        $complexTemplate = <<<EOF
+<h1>Hello</h1>
+content
+multi layout content
+<h2>Bye</h2>
+
+EOF;
+
+        $this->assertEquals($complexTemplate, $templating->render('template_with_template_with_layout.php'));
+    }
+
 
     public function testRenderHelper()
     {

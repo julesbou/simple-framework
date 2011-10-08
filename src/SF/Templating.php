@@ -18,7 +18,11 @@ class Templating implements \ArrayAccess
      */
     protected $directories;
 
-    protected $helpers;
+    protected $helpers = array();
+
+    protected $parents = array();
+
+    protected $current;
 
     public function __construct($directories = array())
     {
@@ -42,18 +46,20 @@ class Templating implements \ArrayAccess
      */
     public function render($template, $vars = array(), $layout = null)
     {
+        $this->current  = $template;
+        $this->parents[$template] = null;
+
         $templatePath   = $this->findTemplate($template);
         $vars           = array('view' => $this) + $vars;
         $content        = $this->doRender($templatePath, $vars);
 
-        if (null === $layout) {
-            return $content;
+        if ($this->parents[$template]) {
+            $layoutPath = $this->findTemplate($this->parents[$template]);
+            $layoutVars = array('content' => $content, 'view' => $this);
+            $content = $this->render($this->parents[$template], $layoutVars + $vars);
         }
 
-        $layoutPath = $this->findTemplate($layout);
-        $layoutVars = array('content' => $content, 'view' => $this);
-
-        return $this->doRender($layoutPath, $layoutVars);
+        return $content;
     }
 
     /**
@@ -93,6 +99,11 @@ class Templating implements \ArrayAccess
         }
 
         return $templatePath;
+    }
+
+    public function extend($template)
+    {
+        $this->parents[$this->current] = $template;
     }
 
     public function offsetGet($name)
