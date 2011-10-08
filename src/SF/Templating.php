@@ -44,7 +44,7 @@ class Templating implements \ArrayAccess
      * @param vars array Variables that get passed to template
      * @param layout string Template of the layout
      */
-    public function render($template, $vars = array(), $layout = null)
+    public function render($template, $vars = array())
     {
         $this->current  = $template;
         $this->parents[$template] = null;

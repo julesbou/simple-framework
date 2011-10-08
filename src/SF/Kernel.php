@@ -42,7 +42,6 @@ abstract class Kernel
     abstract protected function getRoutes();
     abstract protected function getConfig();
     abstract protected function getTemplatingDirectories();
-    abstract protected function getTemplatingVars();
     abstract protected function getLogFile();
 
     protected function build()
