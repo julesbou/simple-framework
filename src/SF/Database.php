@@ -27,7 +27,6 @@ abstract class Database
         // @codeCoverageIgnoreStart
         $this->pdo = $pdo;
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        $this->pdo->exec("SET NAMES 'utf8'");
 
         $this->classname    = $this->getClassName();
         $this->tablename    = $this->getTableName();
