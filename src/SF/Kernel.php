@@ -15,6 +15,8 @@ abstract class Kernel
 {
     protected $env;
 
+    protected $config;
+
     protected $container;
 
     public function __construct($env = 'DEV', Container $container = null)
@@ -24,6 +26,7 @@ abstract class Kernel
         }
 
         $this->env = $env;
+        $this->config = $this->getConfig();
         $this->container = $container;
 
         $this->build();
@@ -62,7 +65,7 @@ abstract class Kernel
     protected function callStep($step)
     {
         $methods = get_class_methods($this);
-        $config = $this->getConfig();
+        $config = $this->config;
 
         foreach ($methods as $method) {
             if (0 === strpos($method, $step)) {
