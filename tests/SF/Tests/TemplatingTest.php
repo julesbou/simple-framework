@@ -34,7 +34,7 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderFirstFoundFirstTaken()
     {
-        $templating = new Templating(array(__DIR__.'/Fixtures/templates', __DIR__.'/Fixtures/Database'));
+        $templating = new Templating(array('ns' => __DIR__.'/Fixtures/templates3', __DIR__.'/Fixtures/templates', __DIR__.'/Fixtures/templates2'));
         $this->assertEquals("template content\n", $templating->render('template.php'));
     }
 
@@ -71,6 +71,16 @@ EOF;
         $this->assertEquals($complexTemplate, $templating->render('template_with_template_with_layout.php'));
     }
 
+    public function testRenderWithParent()
+    {
+        $templating = new Templating(array(__DIR__.'/Fixtures/templates2', __DIR__.'/Fixtures/templates'));
+        $complexTemplate = <<<EOF
+child template content
+template content
+EOF;
+
+        $this->assertEquals($complexTemplate, $templating->render('template.php'));
+    }
 
     public function testRenderHelper()
     {

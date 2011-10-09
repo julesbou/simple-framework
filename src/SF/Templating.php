@@ -22,6 +22,8 @@ class Templating implements \ArrayAccess
 
     protected $parents = array();
 
+    protected $currentTemplate;
+
     protected $current;
 
     public function __construct($directories = array())
@@ -40,23 +42,33 @@ class Templating implements \ArrayAccess
      *
      * Include a template, declare parameters in it and return template's content
      *
-     * @param template string The template filename (eg: my_page.php)
-     * @param vars array Variables that get passed to template
-     * @param layout string Template of the layout
+     * @param string $template The template filename (eg: my_page.php)
+     * @param array $vars Variables that get passed to template
+     * @param integer $index If many templates found choose the specified index
      */
-    public function render($template, $vars = array())
+    public function render($template, $vars = array(), $index = 0)
     {
-        $this->current  = $template;
-        $this->parents[$template] = null;
+        $templatePath   = $this->findTemplate($template, $index);
 
-        $templatePath   = $this->findTemplate($template);
+        $this->current  = $templatePath;
+        $this->currentTemplate  = $template;
+        $this->parents[$templatePath] = null;
+
         $vars           = array('view' => $this) + $vars;
         $content        = $this->doRender($templatePath, $vars);
 
-        if ($this->parents[$template]) {
-            $layoutPath = $this->findTemplate($this->parents[$template]);
+        // parent
+        if ($this->parents[$templatePath] == $template) {
+            $index++;
+            $layoutPath = $this->findTemplate($this->parents[$templatePath], $index);
+            $content .= $this->render($this->parents[$templatePath], $vars, $index);
+        }
+
+        // extend
+        elseif ($this->parents[$templatePath]) {
+            $layoutPath = $this->findTemplate($this->parents[$templatePath]);
             $layoutVars = array('content' => $content, 'view' => $this);
-            $content = $this->render($this->parents[$template], $layoutVars + $vars);
+            $content = $this->render($this->parents[$templatePath], $layoutVars + $vars);
         }
 
         return $content;
@@ -82,7 +94,7 @@ class Templating implements \ArrayAccess
      *
      * @pram string $template Template name
      */
-    private function findTemplate($template)
+    private function findTemplate($template, $index = 0)
     {
         $namespace = '';
 
@@ -91,9 +103,14 @@ class Templating implements \ArrayAccess
         }
 
         if ($namespace == '' && !isset($this->directories[$namespace])) {
+            $foundIndex = 0;
             foreach ($this->directories as $ns => $dir) {
-                if (file_exists($dir.DIRECTORY_SEPARATOR.$template)) {
-                    $namespace = $ns;
+                if (file_exists($dir.DIRECTORY_SEPARATOR.$template) && (is_int($ns) || $ns == '')) {
+                    if ($foundIndex == $index) {
+                        $namespace = $ns;
+                        break;
+                    }
+                    $foundIndex++;
                 }
             }
         }
@@ -112,6 +129,11 @@ class Templating implements \ArrayAccess
     public function extend($template)
     {
         $this->parents[$this->current] = $template;
+    }
+
+    public function parent()
+    {
+        $this->parents[$this->current] = $this->currentTemplate;
     }
 
     public function offsetGet($name)
