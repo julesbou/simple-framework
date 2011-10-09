@@ -77,6 +77,7 @@ EOF;
         $complexTemplate = <<<EOF
 child template content
 template content
+
 EOF;
 
         $this->assertEquals($complexTemplate, $templating->render('template.php'));
