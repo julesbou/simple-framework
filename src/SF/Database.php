@@ -264,7 +264,11 @@ abstract class Database
         foreach ($keys as $i => $key) {
             $val = $values[$i];
             $val = is_string($val) && '?' !== $val ? $this->pdo->quote($val) : $val;
-            $clause .= sprintf('%s %s = %s ', $i == 0 ? '' : $operator, $alias.$key, $val);
+            if (is_array($val)) {
+                $clause .= sprintf('%s %s IN (\'%s\') ', $i == 0 ? '' : $operator, $alias.$key, implode('\',\'', $val));
+            } else {
+                $clause .= sprintf('%s %s = %s ', $i == 0 ? '' : $operator, $alias.$key, $val);
+            }
         }
         return trim($clause);
     }
