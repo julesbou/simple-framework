@@ -14,11 +14,12 @@ namespace SF;
 class Console
 {
     private $kernel;
-    private $commands = array();
+    private $commands;
 
-    public function __construct(Kernel $kernel)
+    public function __construct(Kernel $kernel, $commands = array())
     {
         $this->kernel = $kernel;
+        $this->commands = $commands;
     }
 
     public function register($name, $command)
