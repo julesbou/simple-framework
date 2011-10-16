@@ -42,22 +42,9 @@ class Console
             exit;
         }
 
-        $command = $this->commands[$name];
-        $args = array_splice($argv, 0, 2);
+        array_splice($argv, 0, 2);
 
-        $pair = true;
-        $prev;
-        foreach ($argv as $k => $val) {
-            if (!$pair) {
-            $argv[$prev] = $val;
-            } else {
-                $prev = $val;
-            }
-            $pair = !$pair;
-            unset($argv[$k]);
-        }
-
-        if (!method_exists($command, 'run')) {
+        if (!method_exists($command = $this->commands[$name], 'run')) {
             echo "command '{$name}' should have a run() method\n";
             exit;
         }
