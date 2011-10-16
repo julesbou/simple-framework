@@ -15,11 +15,11 @@ class ClassLoader
 {
     private $classPaths;
 
-    public function __construct(array $classPaths = array())
+    public function __construct(array $classPaths = array(), $prepend = false)
     {
         $this->classPaths = $classPaths;
 
-        spl_autoload_register(array($this, 'loadClass'));
+        spl_autoload_register(array($this, 'loadClass'), true, $prepend);
     }
 
     public function loadClass($class)
