@@ -3,7 +3,7 @@
 namespace SF;
 
 /*
- * This file is part of the SimpleFrameworke
+ * This file is part of the SimpleFramework
  *
  * (c) Jules Boussekeyt <jules.boussekeyt@gmail.com>
  *
