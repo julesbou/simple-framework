@@ -124,10 +124,9 @@ class Database
     private function formatClause(array $keys, $operator = 'AND')
     {
         $clause = '';
-        $vals = array_fill(0, count($keys), '?');
 
         foreach ($keys as $i => $key) {
-            $clause .= sprintf('%s %s = %s ', $i == 0 ? '' : $operator, $key, $vals[$i]);
+            $clause .= ($i == 0 ? '' : $operator) . " $key = ?";
         }
 
         return trim($clause);

@@ -64,15 +64,6 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('wallace', $user['name']);
     }
 
-    public function testFindIn()
-    {
-        // TODO implement me
-        return;
-
-        $user = self::$user->find(array('name' => array('bobby', 'wallace')))->one();
-        $this->assertEquals('wallace', $user['name']);
-    }
-
     public function testDelete()
     {
         self::$user->delete(1);
