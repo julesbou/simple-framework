@@ -20,9 +20,10 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         self::$user = new \SF\Database(self::$pdo, 'test_user', array('user_ID', 'name'));
     }
 
-    public function testFindAllReturnEmptyArray()
+    public function testEmptyResults()
     {
         $this->assertSame(array(), self::$user->findAll());
+        $this->assertSame(null, self::$user->findOneBy(array()));
     }
 
     public function testInsert()

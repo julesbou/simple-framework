@@ -108,9 +108,11 @@ class Database
 
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(array_values($params));
-        $fetch = $fetchOne ? 'fetch' : 'fetchAll';
 
-        return $stmt->$fetch(\PDO::FETCH_ASSOC) ?: array();
+        $fetch = $fetchOne ? 'fetch' : 'fetchAll';
+        $return = $fetchOne ? null : array();
+
+        return $stmt->$fetch(\PDO::FETCH_ASSOC) ?: $return;
     }
 
     /**
