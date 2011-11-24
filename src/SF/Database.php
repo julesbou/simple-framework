@@ -80,7 +80,7 @@ class Database
     {
         $placeholders = $this->formatClause($this->primaryKeys, 'OR');
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->tablename} WHERE $placeholders");
-        $stmt->execute(array($id));
+        $stmt->execute(array_fill(0, count($this->primaryKeys), $id));
 
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
