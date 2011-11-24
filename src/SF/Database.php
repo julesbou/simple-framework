@@ -82,7 +82,7 @@ class Database
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->tablename} WHERE $placeholders");
         $stmt->execute(array_fill(0, count($this->primaryKeys), $id));
 
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
 
     /**

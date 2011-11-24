@@ -24,6 +24,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(array(), self::$user->findAll());
         $this->assertSame(null, self::$user->findOneBy(array()));
+        $this->assertSame(null, self::$user->find(9876));
     }
 
     public function testInsert()
