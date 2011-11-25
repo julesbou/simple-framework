@@ -101,7 +101,7 @@ class Database
         $query = "SELECT * FROM {$this->tablename}";
 
         if (!empty($params)) {
-            $placeholders = $this->formatClause(array_keys($params), 'OR');
+            $placeholders = $this->formatClause(array_keys($params), 'AND');
             $query .= " WHERE $placeholders";
 
         }
