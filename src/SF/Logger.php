@@ -38,6 +38,6 @@ class Logger
 
     protected static function format($message, $type)
     {
-        return sprintf('[%s](%s) %s', date('Y/m/d H:i:s'), $type, $message);
+        return sprintf("[%s](%s) %s\n", date('Y/m/d H:i:s'), $type, $message);
     }
 }

@@ -24,17 +24,13 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     public function testConstructCreateFile()
     {
         unlink($this->logFile);
-        $this->logger = new Logger($this->logFile);
+        $logger = new Logger($this->logFile);
         $this->assertTrue(file_exists($this->logFile));
-
-        return $this->logger;
     }
 
-    /**
-     * @depends testConstructCreateFile
-     */
-    public function testLog(Logger $logger)
+    public function testLog()
     {
+        $logger = new Logger($this->logFile);
         $logger->log('message');
         $this->assertRegexp('/\[(.*)\]\((.*)\) message/', file_get_contents($this->logFile));
 
@@ -49,6 +45,14 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $logger = new MockLogger($this->logFile);
         $logger->log('message', 'type');
         $this->assertEquals('message_|_type', file_get_contents($this->logFile));
+    }
+
+    public function testLineBreaks()
+    {
+        $logger = new Logger($this->logFile);
+        $logger->log('foo');
+        $logger->log('bar');
+        $this->assertCount(2, file($this->logFile), json_encode(file($this->logFile)));
     }
 
     protected function tearDown()
