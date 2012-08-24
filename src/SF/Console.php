@@ -31,7 +31,7 @@ class Console
     {
         if (!isset($argv[1])) {
             echo "please specify a command:\n";
-            echo '- '.implode("\n- ", array_keys($this->commands));
+            echo '- '.implode(PHP_EOL."- ", array_keys($this->commands)).PHP_EOL;
             exit;
         }
 
