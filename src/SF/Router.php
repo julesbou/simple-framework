@@ -46,7 +46,7 @@ class Router
         }
 
         if (false === $routeFound) {
-            throw new HttpException($url, 404);
+            throw new HttpException("'$url' not found [404]", 404);
         }
 
         // sanitize parameters
